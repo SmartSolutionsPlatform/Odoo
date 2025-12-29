@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- SSP Configuration Form View -->
+    <record id="view_ssp_config_form" model="ir.ui.view">
+        <field name="name">ssp.config.form</field>
+        <field name="model">ssp.config</field>
+        <field name="arch" type="xml">
+            <form string="Smart Solutions Platform Configuration">
+                <header>
+                    <button name="action_test_connection" 
+                            string="Test Connection" 
+                            type="object" 
+                            class="btn-primary"
+                            invisible="state != 'connected'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,connected"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="company_id" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Account Details">
+                            <field name="admin_name"/>
+                            <field name="admin_email"/>
+                            <field name="admin_password" password="True"/>
+                        </group>
+                        <group string="Connection">
+                            <field name="platform_url"/>
+                            <field name="account_id" readonly="1"/>
+                            <field name="api_key" readonly="1" password="True"/>
+                            <field name="last_sync" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- SSP Configuration List View -->
+    <record id="view_ssp_config_tree" model="ir.ui.view">
+        <field name="name">ssp.config.tree</field>
+        <field name="model">ssp.config</field>
+        <field name="arch" type="xml">
+            <list string="SSP Configurations">
+                <field name="company_id"/>
+                <field name="admin_email"/>
+                <field name="state"/>
+                <field name="last_sync"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- SSP Configuration Action -->
+    <record id="action_ssp_config" model="ir.actions.act_window">
+        <field name="name">Configuration</field>
+        <field name="res_model">ssp.config</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Configure Smart Solutions Platform
+            </p>
+            <p>
+                Create a new configuration to connect your company to SSP.
+            </p>
+        </field>
+    </record>
+
+    <!-- Root Menu - Goes directly to Dashboard -->
+    <menuitem id="menu_ssp_root"
+              name="Smart Solutions"
+              action="action_ssp_dashboard_server"
+              web_icon="ssp_connector,static/description/icon.png"
+              sequence="100"/>
+
+    <!-- Configuration Menu (in submenu) -->
+    <menuitem id="menu_ssp_settings"
+              name="Settings"
+              parent="menu_ssp_root"
+              sequence="50"/>
+              
+    <menuitem id="menu_ssp_config"
+              name="Configuration"
+              parent="menu_ssp_settings"
+              action="action_ssp_config"
+              sequence="10"/>
+</odoo>

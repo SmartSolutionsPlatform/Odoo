@@ -1,0 +1,7 @@
+# Odoo Data Ignore
+postgresql/
+addons/ssp_connector/
+*.log
+*.pyc
+__pycache__/
+.DS_Store
