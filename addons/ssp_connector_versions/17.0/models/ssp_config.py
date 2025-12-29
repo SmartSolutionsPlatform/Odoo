@@ -21,7 +21,7 @@ class SspConfig(models.Model):
     
     admin_name = fields.Char(
         string='Admin Name',
-        help='Your full name'
+        help='Your full name (auto-filled if empty)'
     )
     
     admin_email = fields.Char(
@@ -30,9 +30,10 @@ class SspConfig(models.Model):
         help='Email for SSP account (will be your login)'
     )
     
-    admin_password = fields.Char(
-        string='Password',
-        help='Password for SSP account (min 8 characters)'
+    odoo_api_key = fields.Char(
+        string='Communication Token',
+        required=False,
+        help='Auto-generated token for platform communication'
     )
     
     api_key = fields.Char(
@@ -49,7 +50,7 @@ class SspConfig(models.Model):
     
     platform_url = fields.Char(
         string='Platform URL',
-        default='https://smartsolutionsplatform.com',
+        default='https://24e1dc7cb2a8.ngrok-free.app',
         required=True,
         help='Smart Solutions Platform URL'
     )
@@ -79,17 +80,24 @@ class SspConfig(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         """Override create para registrar automaticamente na SSP"""
+        import secrets
+        for vals in vals_list:
+            # Gerar Chave de Comunicação automática se não existir no vals
+            if not vals.get('odoo_api_key'):
+                vals['odoo_api_key'] = secrets.token_urlsafe(32)
+            
+            # Auto-preencher nome se vazio
+            if not vals.get('admin_name'):
+                vals['admin_name'] = self.env.user.name
+
         records = super(SspConfig, self).create(vals_list)
         
         for record in records:
-            # Se tem password, fazer auto-registro na SSP
-            if record.admin_password:
-                try:
-                    record._register_on_ssp()
-                except Exception as e:
-                    _logger.error(f'Failed to auto-register on SSP: {str(e)}')
-                    # Não falha a criação, mas marca como erro
-                    record.state = 'error'
+            try:
+                record._register_on_ssp()
+            except Exception as e:
+                _logger.error(f'Failed to auto-register on SSP: {str(e)}')
+                record.state = 'error'
         
         return records
     
@@ -97,8 +105,8 @@ class SspConfig(models.Model):
         """Registra automaticamente a empresa na SSP"""
         self.ensure_one()
         
-        if not self.admin_password:
-            raise Exception('Password is required for registration')
+        # A chave será gerada no create se estiver vazia
+        token = self.odoo_api_key or secrets.token_urlsafe(32)
         
         # Obter dados do Odoo atual
         odoo_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
@@ -110,11 +118,10 @@ class SspConfig(models.Model):
             'company_name': self.company_id.name,
             'admin_email': self.admin_email,
             'admin_name': self.admin_name or self.env.user.name,
-            'password': self.admin_password,
             'odoo_url': odoo_url,
             'odoo_database': odoo_database,
             'odoo_username': odoo_username,
-            'odoo_api_key': self.admin_password,  # Usar a mesma password temporariamente
+            'odoo_api_key': self.odoo_api_key,
             'country': self.company_id.country_id.code if self.company_id.country_id else None
         }
         
@@ -153,6 +160,10 @@ class SspConfig(models.Model):
                     }
                 else:
                     raise Exception(data.get('message', 'Unknown error'))
+            elif response.status_code == 409:
+                # Caso o email já esteja registrado, marcamos como conectado
+                self.state = 'connected'
+                raise Exception('Este email já está registado na plataforma. A sua configuração foi marcada como ligada, mas poderá precisar de atualizar o token manualmente se o dashboard não abrir.')
             else:
                 raise Exception(f'HTTP {response.status_code}: {response.text}')
                 

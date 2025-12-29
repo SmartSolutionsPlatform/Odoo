@@ -22,7 +22,7 @@ This module connects your Odoo instance with Smart Solutions Platform
 for automated invoice processing and data extraction.
     """,
     'author': 'Smart Solutions Platform',
-    'website': 'https://smartsolutionsplatform.com',
+    'website': 'https://24e1dc7cb2a8.ngrok-free.app',
     'license': 'LGPL-3',
     'depends': ['account'],
     'data': [
