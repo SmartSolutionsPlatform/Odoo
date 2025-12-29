@@ -50,7 +50,7 @@ class SspConfig(models.Model):
     
     platform_url = fields.Char(
         string='Platform URL',
-        default='https://24e1dc7cb2a8.ngrok-free.app',
+        default='https://sspt3stingserver.com',
         required=True,
         help='Smart Solutions Platform URL'
     )
