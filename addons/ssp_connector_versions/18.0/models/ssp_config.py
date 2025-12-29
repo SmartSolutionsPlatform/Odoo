@@ -71,7 +71,7 @@ class SspConfig(models.Model):
         readonly=True
     )
     
-    # SQL Constraint: uma configuração por empresa
+    # SQL Constraint: one configuration per company
     _sql_constraints = [
         ('company_unique', 'unique(company_id)', 
          'Only one configuration per company is allowed!')
@@ -79,14 +79,14 @@ class SspConfig(models.Model):
     
     @api.model_create_multi
     def create(self, vals_list):
-        """Override create para registrar automaticamente na SSP"""
+        """Override create to automatically register on SSP"""
         import secrets
         for vals in vals_list:
-            # Gerar Chave de Comunicação automática se não existir no vals
+            # Generate automatic Communication Token if not in vals
             if not vals.get('odoo_api_key'):
                 vals['odoo_api_key'] = secrets.token_urlsafe(32)
             
-            # Auto-preencher nome se vazio
+            # Auto-fill name if empty
             if not vals.get('admin_name'):
                 vals['admin_name'] = self.env.user.name
 
@@ -102,18 +102,18 @@ class SspConfig(models.Model):
         return records
     
     def _register_on_ssp(self):
-        """Registra automaticamente a empresa na SSP"""
+        """Automatically registers the company on SSP"""
         self.ensure_one()
         
-        # A chave será gerada no create se estiver vazia
+        # The key will be generated in create if empty
         token = self.odoo_api_key or secrets.token_urlsafe(32)
         
-        # Obter dados do Odoo atual
+        # Get current Odoo data
         odoo_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         odoo_database = self.env.cr.dbname
         odoo_username = self.env.user.login
         
-        # Dados para enviar à SSP
+        # Data to send to SSP
         payload = {
             'company_name': self.company_id.name,
             'admin_email': self.admin_email,
@@ -138,10 +138,10 @@ class SspConfig(models.Model):
                 data = response.json()
                 
                 if data.get('success'):
-                    # Atualizar com dados retornados
+                    # Update with returned data
                     self.write({
                         'account_id': str(data.get('account_id')),
-                        'api_key': data.get('sso_token', ''),  # 🆕 Guardar token SSO
+                        'api_key': data.get('sso_token', ''),  # 🆕 Save SSO token
                         'state': 'connected',
                         'last_sync': fields.Datetime.now()
                     })
@@ -161,10 +161,10 @@ class SspConfig(models.Model):
                 else:
                     raise Exception(data.get('message', 'Unknown error'))
             elif response.status_code == 409:
-                # Caso o email já esteja registrado, marcamos como conectado
-                # Nota: Idealmente o SSP retornaria os tokens aqui também
+                # If the email is already registered, we mark as connected
+                # Note: Ideally SSP would return tokens here too
                 self.state = 'connected'
-                raise Exception('Este email já está registado na plataforma. A sua configuração foi marcada como ligada, mas poderá precisar de atualizar o token manualmente se o dashboard não abrir.')
+                raise Exception('This email is already registered on the platform. Your configuration was marked as connected, but you might need to update the token manually if the dashboard does not open.')
             else:
                 raise Exception(f'HTTP {response.status_code}: {response.text}')
                 
@@ -173,76 +173,19 @@ class SspConfig(models.Model):
             self.state = 'error'
             raise Exception(f'Connection error: {str(e)}')
     
-    def action_test_connection(self):
-        """Testa a conexão com a plataforma SSP"""
-        self.ensure_one()
-        
-        try:
-            response = requests.post(
-                f'{self.platform_url}/api/odoo/test-connection',
-                headers={
-                    'Authorization': f'Bearer {self.api_key}',
-                    'Content-Type': 'application/json'
-                },
-                json={'test': True},
-                timeout=10
-            )
-            
-            if response.status_code == 200:
-                self.write({
-                    'state': 'connected',
-                    'last_sync': fields.Datetime.now()
-                })
-                return {
-                    'type': 'ir.actions.client',
-                    'tag': 'display_notification',
-                    'params': {
-                        'title': 'Success!',
-                        'message': 'Successfully connected to Smart Solutions Platform',
-                        'type': 'success',
-                        'sticky': False,
-                    }
-                }
-            else:
-                self.state = 'error'
-                return {
-                    'type': 'ir.actions.client',
-                    'tag': 'display_notification',
-                    'params': {
-                        'title': 'Connection Error',
-                        'message': f'Failed to connect: {response.status_code}',
-                        'type': 'danger',
-                        'sticky': True,
-                    }
-                }
-                
-        except Exception as e:
-            _logger.error(f'SSP Connection Error: {str(e)}')
-            self.state = 'error'
-            return {
-                'type': 'ir.actions.client',
-                'tag': 'display_notification',
-                'params': {
-                    'title': 'Connection Error',
-                    'message': f'Error: {str(e)}',
-                    'type': 'danger',
-                    'sticky': True,
-                }
-            }
-    
     @api.model
     def get_config(self):
-        """Retorna a configuração ativa da empresa atual"""
+        """Returns the active configuration for the current company"""
         return self.search([
             ('company_id', '=', self.env.company.id),
             ('active', '=', True)
         ], limit=1)
     
     def action_open_ssp(self):
-        """Abrir SSP - se não configurado, abre configuração"""
+        """Open SSP - if not configured, opens configuration"""
         config = self.env['ssp.config'].get_config()
         
-        # Se não houver configuração, abrir página de configuração
+        # If no configuration exists, open configuration page
         if not config:
             return {
                 'type': 'ir.actions.act_window',
@@ -253,7 +196,7 @@ class SspConfig(models.Model):
                 'context': {'default_company_id': self.env.company.id},
             }
         
-        # Se não tiver API key, mostrar a configuração existente
+        # If there is no API key, show existing configuration
         if not config.api_key:
             return {
                 'type': 'ir.actions.act_window',
@@ -264,7 +207,7 @@ class SspConfig(models.Model):
                 'target': 'current',
             }
         
-        # Tudo configurado - abrir dashboard
+        # Everything configured - open dashboard
         sso_url = f"{config.platform_url}/sso/odoo?token={config.api_key}"
         
         return {

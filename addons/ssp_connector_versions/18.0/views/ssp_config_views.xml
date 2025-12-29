@@ -7,11 +7,6 @@
         <field name="arch" type="xml">
             <form string="Smart Solutions Platform Configuration">
                 <header>
-                    <button name="action_test_connection" 
-                            string="Test Connection" 
-                            type="object" 
-                            class="btn-primary"
-                            invisible="state != 'connected'"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,connected"/>
                 </header>
                 <sheet>
@@ -22,9 +17,9 @@
                     </div>
                     <group>
                         <group string="SSP Registration">
-                            <field name="admin_email" placeholder="example@company.com" string="Seu Email"/>
+                            <field name="admin_email" placeholder="example@company.com" string="Your Email"/>
                             <div colspan="2" class="text-muted">
-                                <i class="fa fa-info-circle"/> Basta introduzir o seu email. A conta será criada automaticamente e os dados de acesso enviados para a sua caixa de entrada.
+                                <i class="fa fa-info-circle"/> Just enter your email. The account will be created automatically and access data will be sent to your inbox.
                             </div>
                             <field name="admin_name" invisible="1"/>
                             <field name="odoo_api_key" invisible="1"/>

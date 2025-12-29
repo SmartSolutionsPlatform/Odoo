@@ -6,16 +6,16 @@
                 <div class="card" style="max-width: 600px; margin: 0 auto;">
                     <div class="card-body">
                         <h2>🚀 Smart Solutions Platform</h2>
-                        <p class="text-muted">Clique no botão abaixo para aceder à plataforma</p>
+                        <p class="text-muted">Click the button below to access the platform</p>
                         <hr/>
                         <a t-att-href="ssp_url" 
                            class="btn btn-primary btn-lg" 
                            target="_blank"
                            style="padding: 15px 40px; font-size: 18px;">
-                            <i class="fa fa-external-link"></i> Abrir Smart Solutions Platform
+                            <i class="fa fa-external-link"></i> Open Smart Solutions Platform
                         </a>
                         <p class="text-muted mt-3" style="font-size: 12px;">
-                            Abrirá numa nova janela com login automático
+                            It will open in a new window with automatic login
                         </p>
                     </div>
                 </div>

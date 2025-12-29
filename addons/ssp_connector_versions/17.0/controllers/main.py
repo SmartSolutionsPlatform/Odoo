@@ -6,9 +6,9 @@ class SspController(http.Controller):
     
     @http.route('/ssp_connector/dashboard', type='http', auth='user')
     def ssp_dashboard(self, **kwargs):
-        """Redireciona para SSP com SSO em nova aba"""
+        """Redirects to SSP with SSO in a new tab"""
         
-        # Buscar configuração
+        # Search for configuration
         config = request.env['ssp.config'].sudo().get_config()
         
         if not config:

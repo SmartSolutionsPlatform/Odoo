@@ -1,36 +1,36 @@
 # Smart Solutions Platform Connector - Odoo Module
 
-## 📦 Versões Disponíveis
+## 📦 Available Versions
 
-Este repositório contém o módulo SSP Connector para múltiplas versões do Odoo.
+This repository contains the SSP Connector module for multiple Odoo versions.
 
-| Pasta | Versão Odoo | Status |
+| Folder | Odoo Version | Status |
 |-------|-------------|--------|
-| `17.0/` | Odoo 17 | ✅ Pronto |
-| `18.0/` | Odoo 18 | ✅ Pronto (Testado) |
-| `19.0/` | Odoo 19 | 🔄 Preparado (baseado no 18) |
+| `17.0/` | Odoo 17 | ✅ Ready |
+| `18.0/` | Odoo 18 | ✅ Ready (Tested) |
+| `19.0/` | Odoo 19 | 🔄 Prepared (based on 18) |
 
-## 🚀 Funcionalidades
+## 🚀 Features
 
-- **Dashboard Embutido**: Abre a plataforma SSP diretamente dentro do Odoo (iframe)
-- **SSO Automático**: Login automático via token
-- **Configuração Simples**: Interface para configurar URL e credenciais
-- **Multi-empresa**: Uma configuração por empresa
+- **Embedded Dashboard**: Opens the SSP platform directly inside Odoo (iframe)
+- **Automatic SSO**: Automatic login via token
+- **Simple Configuration**: Interface to configure URL and credentials
+- **Multi-company**: One configuration per company
 
-## 📋 Diferenças entre Versões
+## 📋 Differences Between Versions
 
 ### Odoo 17 vs 18/19
-- **Views**: Odoo 17 usa `<tree>`, Odoo 18+ usa `<list>`
-- **view_mode**: Odoo 17 usa `tree,form`, Odoo 18+ usa `list,form`
+- **Views**: Odoo 17 uses `<tree>`, Odoo 18+ uses `<list>`
+- **view_mode**: Odoo 17 uses `tree,form`, Odoo 18+ uses `list,form`
 
-## 🛠️ Instalação
+## 🛠️ Installation
 
-1. Copie a pasta da versão correspondente para o diretório `addons` do seu Odoo
-2. Renomeie para `ssp_connector` (remover o sufixo da versão)
-3. Atualize a lista de apps no Odoo
-4. Instale o módulo "Smart Solutions Platform Connector"
+1. Copy the corresponding version folder to your Odoo `addons` directory
+2. Rename it to `ssp_connector` (remove the version suffix)
+3. Update the app list in Odoo
+4. Install the "Smart Solutions Platform Connector" module
 
-## 📁 Estrutura do Módulo
+## 📁 Module Structure
 
 ```
 ssp_connector/
@@ -60,16 +60,16 @@ ssp_connector/
 
 ## 🏪 Odoo Marketplace
 
-Para publicar no Odoo Marketplace, use **branches Git** separadas:
-- Branch `17.0` → Código da pasta `17.0/`
-- Branch `18.0` → Código da pasta `18.0/`
-- Branch `19.0` → Código da pasta `19.0/`
+To publish on the Odoo Marketplace, use separate **Git branches**:
+- Branch `17.0` → Code from folder `17.0/`
+- Branch `18.0` → Code from folder `18.0/`
+- Branch `19.0` → Code from folder `19.0/`
 
-## 📄 Licença
+## 📄 License
 
 LGPL-3
 
-## 👨‍💻 Autor
+## 👨‍💻 Author
 
 Smart Solutions Platform
 https://smartsolutionsplatform.com
