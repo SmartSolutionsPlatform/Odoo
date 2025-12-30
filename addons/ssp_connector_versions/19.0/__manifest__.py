@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Smart Solutions Platform Connector',
-    'version': '19.0.1.0.0',
+    'version': '17.0.1.0.0',
     'category': 'Accounting/Accounting',
     'summary': 'AI-powered invoice processing and automation',
     'description': """

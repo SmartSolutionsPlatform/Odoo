@@ -162,7 +162,6 @@ class SspConfig(models.Model):
                     raise Exception(data.get('message', 'Unknown error'))
             elif response.status_code == 409:
                 # If the email is already registered, we mark as connected
-                # Note: Ideally SSP would return tokens here too
                 self.state = 'connected'
                 raise Exception('This email is already registered on the platform. Your configuration was marked as connected, but you might need to update the token manually if the dashboard does not open.')
             else:
