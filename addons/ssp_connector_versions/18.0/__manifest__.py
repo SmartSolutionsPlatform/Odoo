@@ -38,6 +38,8 @@ for automated invoice processing and data extraction.
         ],
     },
     'images': ['static/description/icon.png', 'static/description/ssp_main_screenshot.png'],
+    'price': 10.0,
+    'currency': 'EUR',
     'installable': True,
     'application': True,
     'auto_install': False,
