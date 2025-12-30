@@ -13,7 +13,7 @@ Automate invoice processing with AI-powered data extraction.
 Features:
 ---------
 * Automatic data extraction from invoices
-* OCR with Google Vision API
+* OCR with advanced proprietary AI models
 * Integration with your existing workflow
 * Real-time processing and validation
 * Multi-language support (PT/EN)
@@ -22,7 +22,7 @@ This module connects your Odoo instance with Smart Solutions Platform
 for automated invoice processing and data extraction.
     """,
     'author': 'Smart Solutions Platform',
-    'website': 'https://sspt3stingserver.com',
+    'website': 'https://smartsolutionsplatform.com',
     'license': 'LGPL-3',
     'depends': ['account'],
     'data': [
@@ -37,7 +37,8 @@ for automated invoice processing and data extraction.
             'ssp_connector/static/src/xml/ssp_dashboard.xml',
         ],
     },
+    'images': ['static/description/icon.png', 'static/description/ssp_main_screenshot.png'],
     'installable': True,
-    'application': False,
+    'application': True,
     'auto_install': False,
 }
