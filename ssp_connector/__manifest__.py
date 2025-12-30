@@ -37,7 +37,7 @@ for automated invoice processing and data extraction.
             'ssp_connector/static/src/xml/ssp_dashboard.xml',
         ],
     },
-    'images': ['static/description/icon.png', 'static/description/main_screenshot.png'],
+    'images': ['static/description/main_screenshot.png'],
     'price': 10.0,
     'currency': 'EUR',
     'support': 'info@smartsolutionsplatform.com',
